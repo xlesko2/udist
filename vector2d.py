@@ -21,6 +21,18 @@ class Vector2D(object):
 		self.y = y
 		return None
 	
+	def __eq__(self, other):
+		assert isinstance(other, Vector2D), 'other not a Vector2D'
+		return self.x == other.x and self.y == other.y
+	
+	def __lt__(self, other):
+		assert isinstance(other, Vector2D), 'other not a Vector2D'
+		return (self.x, self.y) < (other.x, other.y)
+	
+	def __le__(self, other):
+		assert isinstance(other, Vector2D), 'other not a Vector2D'
+		return (self.x, self.y) <= (other.x, other.y)
+			
 	def __len__(self):
 		return math.sqrt(self.x**2 + self.y**2)
 	
@@ -52,3 +64,6 @@ class Vector2D(object):
 	
 	def __str__(self):
 		return 'v({0},{1})'.format(self.x, self.y)
+
+u = Vector2D(10,10)
+v = Vector2D(8,69)
