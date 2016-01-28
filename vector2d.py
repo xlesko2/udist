@@ -19,6 +19,7 @@ class Vector2D(object):
 		assert is_number(y), 'Non-numerical y value: {0}'.format(y)
 		self.x = x
 		self.y = y
+		self.length = math.sqrt(self.x**2 + self.y**2)
 		return None
 	
 	def __eq__(self, other):
