@@ -4,10 +4,13 @@ from vector2d import Vector2D
 class Organization(object):
 	'''
 	Class representing a 'place' in the world, such as a factory or store.
-	Virtual class inherited by Factory.
+	Virtual class, inherited only by Factory so far.
 	'''
 	name = 'Organization'
-	pass
+	def __init__(self, position):
+		assert isinstance(position, Vector2D), 'position not a Vector2D.'
+		self.position = position
+		return None
 
 class Factory(Organization):
 	'''
@@ -24,6 +27,8 @@ class Factory(Organization):
 			-- speed - float, coefficient of product manufacture type
 			-- position - 2D Vector that positions factory in game world
 		'''
+		Organization.__init__(self, position)
+		
 		assert isinstance(product_type, ProductType),\
 			'product_type not a ProductType'
 		self.product_type = product_type
@@ -31,8 +36,7 @@ class Factory(Organization):
 		assert isinstance(speed, float), 'speed not a float.'
 		self.speed = speed
 		
-		assert isinstance(position, Vector2D), 'position not a Vector2D.'
-		self.position = position
+		return None
 	
 	def __repr__(self):
 		return '<Factory, ID={0}, position={1}, speed={2}, product={3}>'.format(
