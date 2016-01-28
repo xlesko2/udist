@@ -41,6 +41,3 @@ class Vector2D(object):
 	def __floordiv__(self, scalar):
 		assert scalar != 0, 'Tried to divide vector by zero.'
 		return Vector2D(*map(lambda i: int(i/scalar), [self.x, self.y]))
-
-a = Vector2D(42,69)
-b = a/2
