@@ -5,33 +5,28 @@ class ProductType(object):
 	'''
 	name = 'ProductType'
 	
-	def __init__(self, name, requirements, production_time):
+	def __init__(self, name, requirements, difficulty):
 		'''
 		Params:
 			-- name - string
 			-- requirements - dict of required materials/products
-			-- production_time - base time of making a product of this type
-				(integer value)
+			-- difficulty - float, affects rate of production
 		'''
 		assert str(name) == name, 'Product name not a string.'
 		self.name = name
 		
 		assert isinstance(requirements, dict), 'Requirements not a dict.'
-		assert all(isinstance(i, Product) for i in requirements),\
-			'Invalid requirement (not a product).'
+		assert all(isinstance(i, ProductType) for i in requirements),\
+			'Invalid requirement (not a ProductType).'
 		self.requirements = requirements
 		
-		assert isinstance(production_time, int), 'Non-integer production time.'
-		self.production_time = production_time
+		assert isinstance(difficulty, float), 'Non-float difficulty ratio.'
+		self.difficulty = difficulty
 		return None
 	
 	def __repr__(self):
-		return '<ProductType, ID={0}, name={1}, reqs={2}, time={3}>'.format(
-			hex(id(self)), self.name, self.requirements.keys(),
-			self.production_time)
-
-a = ProductType('Ziemiaciek', {}, 42)
-
+		return '<ProductType, ID={0}, name={1}, reqs={2}, difficulty={3}>'.format(
+			hex(id(self)), self.name, self.requirements.keys(), self.difficulty)
 
 class Product(object):
 	'''
@@ -54,5 +49,3 @@ class Product(object):
 	def __repr__(self):
 		return '<Product, ID={0}, type={1}>'.format(hex(id(self)),
 			self.product_type.name)
-
-z = Product(a)
