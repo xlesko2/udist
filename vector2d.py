@@ -21,9 +21,6 @@ class Vector2D(object):
 		self.y = y
 		return None
 	
-	def __str__(self):
-		return '({0}, {1})'.format(self.x, self.y)
-	
 	def __len__(self):
 		return math.sqrt(self.x**2 + self.y**2)
 	
@@ -48,3 +45,10 @@ class Vector2D(object):
 	def __floordiv__(self, scalar):
 		assert scalar != 0, 'Tried to divide vector by zero.'
 		return Vector2D(*map(lambda i: int(i/scalar), [self.x, self.y]))
+	
+	def __repr__(self):
+		return '<Vector2D, ID={0}, x={1}, y={2})'.format(hex(id(self)),
+			self.x, self.y)
+	
+	def __str__(self):
+		return 'v({0},{1})'.format(self.x, self.y)
