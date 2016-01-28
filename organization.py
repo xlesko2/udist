@@ -43,6 +43,9 @@ class Factory(Organization):
 		for item in self.product_type.requirements:
 			self.storage[item] = 0
 		
+		# list of factories supplying the materials
+		self.suppliers = dict()
+		
 		# output queue
 		self.output = deque()
 		
@@ -59,11 +62,28 @@ class Factory(Organization):
 					key.name, self.storage[key]) for key in self.storage]))\
 					+ 'Output queue length: {0}'.format(len(self.output))
 	
+	def update_suppliers(self, world):
+		'''
+		Method for updating the refs to factories supplying required materials.
+		Param world -- ref to world object
+		'''
+		for m in self.storage:
+			self.suppliers[m] = world.product_origin[m]
+		return None
+	
 	def material_sufficient(self):
+		'''
+		Aux. method returning the number of product items that could
+		be produced with current materials in storage (not taking into account
+		the capacity of the factory).
+		'''
 		return int(min([self.storage[i]/self.product_type.requirements[i]\
 			for i in self.storage]))
 	
 	def produce(self):
+		'''
+		Method for handling producing during one time unit.
+		'''
 		amount = min([self.material_sufficient(), self.capacity])
 		for item in self.product_type.requirements:
 			self.storage[item] -= amount * self.product_type.requirements[item]

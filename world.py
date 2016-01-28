@@ -1,5 +1,5 @@
 from vector2d import Vector2D
-from organization import Organization, a, b
+from organization import Organization, Factory, a, b
 
 class World(object):
 	'''
@@ -19,6 +19,10 @@ class World(object):
 		
 		assert isinstance(objects, list)
 		self.objects = dict()
+		
+		# material production factory database (for supply purposes)
+		self.product_origin = dict()
+		
 		for obj in objects:
 			assert isinstance(obj, Organization),\
 				'{0} not an organization object.'.format(obj)
@@ -31,6 +35,13 @@ class World(object):
 					self.objects[obj.position].__class__.name,
 					hex(id(self.objects[obj.position]))))
 			self.objects[obj.position] = obj
+			if isinstance(obj, Factory):
+				self.product_origin[obj.product_type] = obj
+		
+		for i in self.objects:
+			if isinstance(self.objects[i], Factory):
+				self.objects[i].update_suppliers
+		
 		return None
 	
 	def __repr__(self):

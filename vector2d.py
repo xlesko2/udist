@@ -64,6 +64,9 @@ class Vector2D(object):
 	
 	def __str__(self):
 		return 'v({0},{1})'.format(self.x, self.y)
+	
+	def __hash__(self):
+		return hash((self.x, self.y))
 
 u = Vector2D(10,10)
 v = Vector2D(8,69)
