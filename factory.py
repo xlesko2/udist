@@ -1,4 +1,4 @@
-from organization import organization
+from organization import Organization
 
 class Factory(Organization):
 	'''
