@@ -1,0 +1,19 @@
+UNICORN DISTRIBUTION by kayelsvk
+github.com/kayelsvk/unicorn-dist
+Developed since 27 Jan 2016
+
+Unicorn Distribution is an OOP-based product manufacture and distribution
+simulation thought up and developed by kayelsvk, a young computer science
+student from Slovakia. It is primarily meant to be an exercise
+in object-oriented programming and software design, and (in its later stages)
+as a tool to provide interesting (and perhaps useful) simulation data.
+
+The basic design looks like this:
+The game/simulation is taking place in a 2D grid-world. There are various
+organizations that interact with each other and with materials/products. So far,
+the only available type of an organization is a factory, which produces
+a certain type of a product from raw materials and/or other products. Later on,
+there will be other types of organizations available, such as mines (providing
+raw materials) or shopping centres (providing the final outlet for products).
+The simulation runtime is step-based, with each step executing supply ordering,
+product manufacture and expedition and other necessary tasks.
