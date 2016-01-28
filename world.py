@@ -1,13 +1,6 @@
 from vector2d import Vector2D
 from organization import Organization, a, b
 
-class OccupiedSpaceException(Exception):
-	'''
-	Exception indicating that there was an attempt to place an object
-	into an already-occupied tile of the world.
-	'''
-	pass
-
 class World(object):
 	'''
 	Class representing the game world (map).
@@ -29,8 +22,14 @@ class World(object):
 		for obj in objects:
 			assert isinstance(obj, Organization),\
 				'{0} not an organization object.'.format(obj)
-			if obj.position in self.objects:
-				raise OccupiedSpaceException(obj.position)
+			assert obj.position.x in range(self.size.x)\
+				and obj.position.y in range(self.size.y),\
+				'{0} outside of world (size {1})'.format(
+					obj.position, self.size)
+			assert not(obj.position in self.objects), '{0} occupied by {1}'\
+				.format(obj.position, '{0} (ID {1})'.format(
+					self.objects[obj.position].__class__.name,
+					hex(id(self.objects[obj.position]))))
 			self.objects[obj.position] = obj
 		return None
 	
