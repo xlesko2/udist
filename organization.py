@@ -39,3 +39,4 @@ class Factory(Organization):
 			hex(id(self)), self.position, self.speed, self.product_type.name)
 
 a = Factory(ProductType('Ziemiaciek', {}, 1), 1.04, Vector2D(10,10))
+b = Factory(ProductType('Pluszowy Mort', {}, 1), 1.04, Vector2D(12,10))

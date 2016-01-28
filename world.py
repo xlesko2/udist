@@ -1,4 +1,12 @@
 from vector2d import Vector2D
+from organization import Organization, a, b
+
+class OccupiedSpaceException(Exception):
+	'''
+	Exception indicating that there was an attempt to place an object
+	into an already-occupied tile of the world.
+	'''
+	pass
 
 class World(object):
 	'''
@@ -6,26 +14,35 @@ class World(object):
 	'''
 	name = 'World'
 	
-	def __init__(self, size, objects = dict()):
+	def __init__(self, size, objects):
 		'''
 		Params:
-			-- size - a Vector2D
-			-- objects - a dict with objects as keys and coordinates as values.
-			The world.objects dictionary reverses these pairs.
+			-- size - Vector2D
+			-- objects - dict of Organization objects (subject to extension
+				to other classes later in the development).
 		'''
+		assert isinstance(size, tuple) and len(size) == 2, 'size not a 2-tuple.'
 		self.size = Vector2D(*size)
+		
+		assert isinstance(objects, list)
 		self.objects = dict()
-		for ref in objects:
-			assert isinstance(objects[ref], Vector2D), 'Coords not a vector.'
-			assert objects[ref].x < self.size.x\
-				and objects[ref].y < self.size.y,\
-				'Object placed outside of the world.'
-			self.objects[objects[ref]] = ref
+		for obj in objects:
+			assert isinstance(obj, Organization),\
+				'{0} not an organization object.'.format(obj)
+			if obj.position in self.objects:
+				raise OccupiedSpaceException(obj.position)
+			self.objects[obj.position] = obj
 		return None
+	
+	def __repr__(self):
+		return '<World, ID={0}, size={1}, objects=[{2}]>'.format(
+			hex(id(self)), self.size, ', '.join(['{0} at {1}'.format(
+				'{0} (ID {1})'.format(self.objects[key].__class__.name,
+					hex(id(self.objects[key]))), key) for key in self.objects]))
 	
 	def __str__(self):
 		return 'World object\nSize: {0}x{1} tiles\nObjects:{2}'.format(
 			self.size.x, self.size.y, '\n' + '\n'.join(['{0} at {1}'.format(
 			str(v),str(k)) for k,v in self.objects.items()]))
 
-w = World((42,69), {'Dante': Vector2D(41,68)})
+w = World((42,69), [a,b])
