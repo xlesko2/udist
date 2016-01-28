@@ -1,10 +1,10 @@
-from organization import Organization
-
 class ProductType(object):
 	'''
 	Class representing a product type.
 	Product type specifies manufacture & transport requirements etc.
 	'''
+	name = 'ProductType'
+	
 	def __init__(self, name, requirements, production_time):
 		'''
 		Params:
@@ -32,16 +32,14 @@ class Product(object):
 	A product is an instance of a product type
 	(though this is not represented by object organization here).
 	'''
-	def __init__(self, product_type, holder):
+	name = 'Product'
+	
+	def __init__(self, product_type):
 		'''
 		Params:
 			-- product_type - ProductType object ref.
-			-- holder - Organization object ref.
 		'''
 		assert isinstance(product_type, ProductType),\
 			'product_type not ProductType'
 		self.product_type = product_type
-		assert isinstance(holder, Organization),\
-			'Holder not an Organization object.'
-		self.holder = holder
 		return None

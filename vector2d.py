@@ -1,8 +1,12 @@
+import math
+
 class Vector2D(object):
 	'''
 	Class representing a 2D vector. Implemented for convenience
 	of being able to call x and y parametres of coordinates explicitly.
 	'''
+	name = 'Vector2D'
+	
 	def __init__(self, x = 0, y = 0):
 		def is_number(x):
 			try:
@@ -19,6 +23,9 @@ class Vector2D(object):
 	
 	def __str__(self):
 		return '({0}, {1})'.format(self.x, self.y)
+	
+	def __len__(self):
+		return math.sqrt(self.x**2 + self.y**2)
 	
 	def __add__(self, other):
 		assert type(other) is type(self), "{0} is not a vector".format(other)
