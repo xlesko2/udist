@@ -75,3 +75,6 @@ class Package(object):
 	def __repr__(self):
 		return '<Package, ID={0}, products={1}'.format(hex(id(self)),
 			list(self.products))
+	
+	def __len__(self):
+		return len(self.products)
