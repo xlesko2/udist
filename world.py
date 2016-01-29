@@ -1,5 +1,6 @@
 from vector2d import Vector2D
-from organization import Organization, Factory, a, b
+from product import ProductType
+from organization import Organization, Factory
 
 class World(object):
 	'''
@@ -37,15 +38,15 @@ class World(object):
 			self.objects[obj.position] = obj
 			if isinstance(obj, Factory):
 				self.product_origin[obj.product_type] = obj
-		
+			
 		for i in self.objects:
 			if isinstance(self.objects[i], Factory):
-				self.objects[i].update_suppliers
+				self.objects[i].update_suppliers(self)
 		return None
 	
 	def single_round(self):
 		for obj in self.objects:
-			obj.single_round()
+			self.objects[obj].single_round()
 	
 	def __repr__(self):
 		return '<World, ID={0}, size={1}, objects=[{2}]>'.format(
@@ -58,4 +59,10 @@ class World(object):
 			self.size.x, self.size.y, '\n' + '\n'.join(['{0} at {1}'.format(
 			str(v),str(k)) for k,v in self.objects.items()]))
 
-w = World((42,69), [a,b])
+textile = ProductType('Textile', {}, 0.97)
+ziemiaciek = ProductType('Ziemiaciek', {textile: 2}, 1.04)
+pluszowy_mort = ProductType('Pluszowy Mort', {textile: 2, ziemiaciek: 1}, 1.24)
+f_tex = Factory(textile, 1000, Vector2D(5,5))
+f_ziem = Factory(ziemiaciek, 400, Vector2D(7,12))
+f_mort = Factory(pluszowy_mort, 1500, Vector2D(15,7))
+w = World((42,69), [f_tex, f_ziem, f_mort])
