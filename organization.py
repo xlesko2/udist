@@ -100,7 +100,7 @@ class Factory(Organization):
 			 return None
 		incoming_load = self.input.popleft()
 		for package in incoming_load:
-			while package.size() > 0:
+			while len(package) > 0:
 				item = package.unpack()
 				assert item.product_type in self.storage,\
 					'Factory with requirements {0}'.format(list(
