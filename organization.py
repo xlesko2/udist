@@ -14,6 +14,10 @@ class Organization(object):
 		self.position = position
 		return None
 
+	def single_round(self):
+		pass
+	
+
 class Factory(Organization):
 	'''
 	Class representing a single manufacturing unit.

@@ -41,8 +41,11 @@ class World(object):
 		for i in self.objects:
 			if isinstance(self.objects[i], Factory):
 				self.objects[i].update_suppliers
-		
 		return None
+	
+	def single_round(self):
+		for obj in self.objects:
+			obj.single_round()
 	
 	def __repr__(self):
 		return '<World, ID={0}, size={1}, objects=[{2}]>'.format(
