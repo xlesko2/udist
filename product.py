@@ -1,3 +1,5 @@
+from collections import deque
+
 class ProductType(object):
 	'''
 	Class representing a product type.
@@ -49,3 +51,24 @@ class Product(object):
 	def __repr__(self):
 		return '<Product, ID={0}, type={1}>'.format(hex(id(self)),
 			self.product_type.name)
+
+class Package(object):
+	'''
+	Class representing a package of products sent between Organizations.
+	'''
+	def __init__(self):
+		self.products = deque()
+		return None
+	
+	def pack(self, product):
+		self.products.append(product)
+		return None
+	
+	def unpack(self):
+		assert len(self.products), 'Tried to unpack from empty Package {0}.'\
+			.format(hex(id(self)))
+		return self.products.popleft()
+	
+	def __repr__(self):
+		return '<Package, ID={0}, products={1}'.format(hex(id(self)),
+			list(self.products))

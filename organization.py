@@ -1,4 +1,4 @@
-from product import ProductType, Product
+from product import ProductType, Product, Package
 from vector2d import Vector2D
 from collections import deque
 
@@ -106,9 +106,10 @@ class Factory(Organization):
 		total_requirements = sum(self.customers.values())
 		production_available = len(self.output)
 		for cust in self.customers:
-			package = deque()
-			for i in range(int(self.customers[cust]/total_requirements)):
-				package.append(self.output.popleft())
+			package = Package()
+			for i in range(int(production_available * \
+				self.customers[cust]/total_requirements)):
+				package.pack(self.output.popleft())
 			self.send(package, cust)
 		return None
 	
