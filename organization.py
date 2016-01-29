@@ -75,6 +75,7 @@ class Factory(Organization):
 		'''
 		for m in self.storage:
 			self.suppliers[m] = world.product_origin[m]
+			self.customers[self.suppliers[m]] = self.requirements[m]
 		return None
 	
 	def material_sufficient(self):
@@ -132,6 +133,15 @@ class Factory(Organization):
 				self.customers[cust]/total_requirements)):
 				package.pack(self.output.popleft())
 			self.send(package, cust)
+		return None
+	
+	def single_round(self):
+		'''
+		Method for handling actions taking place in a single time unit.
+		'''
+		self.accept_supplies()
+		self.produce()
+		self.export()
 		return None
 	
 ziemiaciek = ProductType('Ziemiaciek', {}, 1.00)
