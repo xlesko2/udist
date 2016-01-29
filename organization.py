@@ -46,6 +46,12 @@ class Factory(Organization):
 		# list of factories supplying the materials
 		self.suppliers = dict()
 		
+		# supply input queue
+		self.input = deque()
+		
+		# list of customers for products
+		self.customers = dict()
+		
 		# output queue
 		self.output = deque()
 		
@@ -89,6 +95,28 @@ class Factory(Organization):
 			self.storage[item] -= amount * self.product_type.requirements[item]
 		for p in range(amount):
 			self.output.append(Product(self.product_type))
+		return None
+	
+	def export(self):
+		'''
+		Method handling production export to customers.
+		Current system: production is divided among customers in ratios
+		equivalent to their product requirements.
+		'''
+		total_requirements = sum(self.customers.values())
+		production_available = len(self.output)
+		for cust in self.customers:
+			package = deque()
+			for i in range(int(self.customers[cust]/total_requirements)):
+				package.append(self.output.popleft())
+			self.send(package, cust)
+		return None
+	
+	def send(self, package, customer):
+		dist = int((self.position - customer.position).length)
+		while len(customer.input) < dist:
+			customer.input.append(list())
+		customer.input[dist - 1].append(package)
 		return None
 
 ziemiaciek = ProductType('Ziemiaciek', {}, 1.00)

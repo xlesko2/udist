@@ -33,9 +33,6 @@ class Vector2D(object):
 	def __le__(self, other):
 		assert isinstance(other, Vector2D), 'other not a Vector2D'
 		return (self.x, self.y) <= (other.x, other.y)
-			
-	def __len__(self):
-		return math.sqrt(self.x**2 + self.y**2)
 	
 	def __add__(self, other):
 		assert type(other) is type(self), "{0} is not a vector".format(other)
