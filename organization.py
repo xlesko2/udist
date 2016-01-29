@@ -45,7 +45,7 @@ class Factory(Organization):
 		# storage of required materials
 		self.storage = dict()
 		for item in self.product_type.requirements:
-			self.storage[item] = 0
+			self.storage[item] = self.product_type.requirements[item]
 		
 		# list of factories supplying the materials
 		self.suppliers = dict()
@@ -79,7 +79,7 @@ class Factory(Organization):
 		'''
 		for m in self.storage:
 			self.suppliers[m] = world.product_origin[m]
-			self.customers[self.suppliers[m]] = self.requirements[m]
+			self.suppliers[m].customers[self] = self.storage[m]
 		return None
 	
 	def material_sufficient(self):
@@ -101,9 +101,12 @@ class Factory(Organization):
 		incoming_load = self.input.popleft()
 		for package in incoming_load:
 			while package.size() > 0:
-				item = package.unpack
-				assert item in self.storage, 'Accepted spam package.'
-				self.storage[item] += 1
+				item = package.unpack()
+				assert item.product_type in self.storage,\
+					'Factory with requirements {0}'.format(list(
+						self.storage.keys())) + ' accepted spam: {1}.'.\
+							format(self, item)
+				self.storage[item.product_type] += 1
 		return None
 		
 	def produce(self):
@@ -133,6 +136,8 @@ class Factory(Organization):
 		Current system: production is divided among customers in ratios
 		equivalent to their product requirements.
 		'''
+		if len(self.customers) == 0:
+			return None
 		total_requirements = sum(self.customers.values())
 		production_available = len(self.output)
 		for cust in self.customers:
