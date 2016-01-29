@@ -48,6 +48,15 @@ class World(object):
 		for obj in self.objects:
 			self.objects[obj].single_round()
 	
+	def print_map(self):
+		map_matrix = [['_' for j in range(self.size.y)] for i in range(self.size.x)]
+		for obj in self.objects:
+			if isinstance(self.objects[obj], Factory):
+				map_matrix[obj.x][obj.y] = 'F'
+		for i in map_matrix:
+			print(i)
+		return None
+	
 	def __repr__(self):
 		return '<World, ID={0}, size={1}, objects=[{2}]>'.format(
 			hex(id(self)), self.size, ', '.join(['{0} at {1}'.format(
@@ -65,4 +74,4 @@ pluszowy_mort = ProductType('Pluszowy Mort', {textile: 2, ziemiaciek: 1}, 1.24)
 f_tex = Factory(textile, 1000, Vector2D(5,5))
 f_ziem = Factory(ziemiaciek, 400, Vector2D(7,12))
 f_mort = Factory(pluszowy_mort, 1500, Vector2D(15,7))
-w = World((42,69), [f_tex, f_ziem, f_mort])
+w = World((20,20), [f_tex, f_ziem, f_mort])
