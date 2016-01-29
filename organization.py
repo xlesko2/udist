@@ -86,6 +86,21 @@ class Factory(Organization):
 		return int(min([self.storage[i]/self.product_type.requirements[i]\
 			for i in self.storage]))
 	
+	def accept_supplies(self):
+		'''
+		Method for accepting the supplies, i.e. moving them from the first
+		place in input queue into the storage.
+		'''
+		if len(self.input) == 0: # no supplies available
+			 return None
+		incoming_load = self.input.popleft()
+		for package in incoming_load:
+			while package.size() > 0:
+				item = package.unpack
+				assert item in self.storage, 'Accepted spam package.'
+				self.storage[item] += 1
+		return None
+		
 	def produce(self):
 		'''
 		Method for handling producing during one time unit.
@@ -97,6 +112,12 @@ class Factory(Organization):
 			self.output.append(Product(self.product_type))
 		return None
 	
+	def send(self, package, customer):
+		dist = int((self.position - customer.position).length)
+		while len(customer.input) < dist:
+			customer.input.append(list())
+		customer.input[dist - 1].append(package)
+		return None
 	def export(self):
 		'''
 		Method handling production export to customers.
@@ -113,13 +134,6 @@ class Factory(Organization):
 			self.send(package, cust)
 		return None
 	
-	def send(self, package, customer):
-		dist = int((self.position - customer.position).length)
-		while len(customer.input) < dist:
-			customer.input.append(list())
-		customer.input[dist - 1].append(package)
-		return None
-
 ziemiaciek = ProductType('Ziemiaciek', {}, 1.00)
 a = Factory(ziemiaciek, 220, Vector2D(10,10))
 b = Factory(ProductType('Pluszowy Mort', {ziemiaciek: 100}, 1.02), 470, Vector2D(12,10))

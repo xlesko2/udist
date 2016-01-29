@@ -60,6 +60,9 @@ class Package(object):
 		self.products = deque()
 		return None
 	
+	def size(self):
+		return len(self.products)
+	
 	def pack(self, product):
 		self.products.append(product)
 		return None
