@@ -110,7 +110,11 @@ class Factory(Organization):
 		'''
 		Method for handling producing during one time unit.
 		'''
-		amount = min([self.material_sufficient(), self.capacity])
+		if len(self.storage) > 0:
+			amount = min([self.material_sufficient(), self.capacity])
+		else:
+			amount = self.capacity # When no materials are required.
+		
 		for item in self.product_type.requirements:
 			self.storage[item] -= amount * self.product_type.requirements[item]
 		for p in range(amount):
@@ -147,7 +151,3 @@ class Factory(Organization):
 		self.produce()
 		self.export()
 		return None
-	
-ziemiaciek = ProductType('Ziemiaciek', {}, 1.00)
-a = Factory(ziemiaciek, 220, Vector2D(10,10))
-b = Factory(ProductType('Pluszowy Mort', {ziemiaciek: 100}, 1.02), 470, Vector2D(12,10))
