@@ -85,6 +85,7 @@ class Mine(Organization):
 		self.export()
 		return None
 
+
 class Factory(Organization):
 	'''
 	Class representing a single manufacturing unit.
@@ -223,3 +224,7 @@ class Factory(Organization):
 		self.produce()
 		self.export()
 		return None
+
+
+class CustomerPoint(Organization):
+	pass
