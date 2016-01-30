@@ -18,6 +18,73 @@ class Organization(object):
 		pass
 	
 
+class Mine(Organization):
+	'''
+	Class representing an organization that exclusively produces materials,
+	without requiring any supplies on input.
+	'''
+	def __init__(self, product_type, capacity, position):
+		'''
+		Params: same as Factory (see below).
+		'''
+		Organization.__init__(self, position)
+		
+		assert isinstance(product_type, ProductType),\
+			'product_type not a ProductType'
+		self.product_type = product_type
+		
+		assert isinstance(capacity, int), 'capacity not an int.'
+		self.capacity = int(capacity/self.product_type.difficulty)
+		
+		# list of customers for products
+		self.customers = dict()
+		
+		# output queue
+		self.output = deque()
+		
+		return None
+	
+	def __repr__(self):
+		return '<Mine, ID={0}, position={1}, capacity={2}, product={3}>'.format(
+			hex(id(self)), self.position, self.capacity, self.product_type.name)
+	
+	def produce(self):
+		'''
+		Method for handling producing during one time unit.
+		'''
+		for p in range(self.capacity):
+			self.output.append(Product(self.product_type))
+		return None
+	
+	def send(self, package, customer):
+		dist = int((self.position - customer.position).length)
+		while len(customer.input) < dist:
+			customer.input.append(list())
+		customer.input[dist - 1].append(package)
+		return None
+	def export(self):
+		'''
+		Method handling production export to customers.
+		Current system: production is divided among customers in ratios
+		equivalent to their product requirements.
+		'''
+		if len(self.customers) == 0:
+			return None
+		total_requirements = sum(self.customers.values())
+		production_available = len(self.output)
+		for cust in self.customers:
+			package = Package()
+			for i in range(int(production_available * \
+				self.customers[cust]/total_requirements)):
+				package.pack(self.output.popleft())
+			self.send(package, cust)
+		return None
+	
+	def single_round(self):
+		self.produce()
+		self.export()
+		return None
+
 class Factory(Organization):
 	'''
 	Class representing a single manufacturing unit.
