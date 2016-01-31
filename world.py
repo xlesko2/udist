@@ -43,6 +43,8 @@ class World(object):
 			if isinstance(self.objects[i], Factory) or\
 				isinstance(self.objects[i], CustomerPoint):
 				self.objects[i].update_suppliers(self)
+		
+		self.map = self.construct_map()
 		return None
 	
 	
@@ -58,7 +60,7 @@ class World(object):
 		for obj in self.objects:
 			self.objects[obj].single_round()
 	
-	def print_map(self):
+	def construct_map(self):
 		map_matrix = [[' ' for j in range(self.size.y)] for i in range(self.size.x)]
 		for obj in self.objects:
 			if isinstance(self.objects[obj], Mine):
@@ -67,15 +69,4 @@ class World(object):
 				map_matrix[obj.x][obj.y] = 'F'
 			elif isinstance(self.objects[obj], CustomerPoint):
 				map_matrix[obj.x][obj.y] = 'C'
-		for i in map_matrix:
-			print(i)
-		return None
-
-textile = ProductType('Textile', {}, 0.97)
-ziemiaciek = ProductType('Ziemiaciek', {textile: 2}, 1.04)
-pluszowy_mort = ProductType('Pluszowy Mort', {textile: 2, ziemiaciek: 1}, 1.24)
-m_tex = Mine(textile, 1000, Vector2D(5,5))
-f_ziem = Factory(ziemiaciek, 400, Vector2D(7,12))
-f_mort = Factory(pluszowy_mort, 1500, Vector2D(15,7))
-c_mort = CustomerPoint(pluszowy_mort, 500, Vector2D(4,18))
-w = World((20,20), [m_tex, f_ziem, f_mort, c_mort])
+		return '\n'.join([' '.join(i) for i in map_matrix])
