@@ -27,8 +27,12 @@ class ProductType(object):
 		return None
 	
 	def __repr__(self):
-		return '<ProductType, ID={0}, name={1}, reqs={2}, difficulty={3}>'.format(
-			hex(id(self)), self.name, self.requirements.keys(), self.difficulty)
+		return '<ProductType {0} = {1}, reqs {2}, diff. {3}>'.format(
+			hex(id(self))[-5:], self.name,
+			[x.name for x in self.requirements.keys()], self.difficulty)
+	def __str__(self):
+		return 'ProductType {0}'.format(self.name)
+
 
 class Product(object):
 	'''
@@ -49,8 +53,11 @@ class Product(object):
 		return None
 	
 	def __repr__(self):
-		return '<Product, ID={0}, type={1}>'.format(hex(id(self)),
+		return '<Product {0}, type={1}>'.format(hex(id(self))[-5:],
 			self.product_type.name)
+	def __str__(self):
+		return 'Product of type {0}'.format(self.product_type.name)
+
 
 class Package(object):
 	'''
@@ -70,8 +77,11 @@ class Package(object):
 		return self.products.popleft()
 	
 	def __repr__(self):
-		return '<Package, ID={0}, products={1}'.format(hex(id(self)),
+		return '<Package {0}, contents: {1}'.format(hex(id(self)),
 			list(self.products))
+	def __str__(self):
+		return 'Package containing {0}'.format(list(map(lambda i: str(i), 
+			self.products)))
 	
 	def __len__(self):
 		return len(self.products)

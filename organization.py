@@ -45,9 +45,14 @@ class Mine(Organization):
 		return None
 	
 	def __repr__(self):
-		return '<Mine, ID={0}, position={1}, capacity={2}, product={3}>'.format(
-			hex(id(self)), self.position, self.capacity, self.product_type.name)
+		return '<Mine {0} at {1}, cap. {2}, producing {3}>'.format(
+			hex(id(self))[-5:], self.position, self.capacity,\
+			self.product_type.name)
 	
+	def __str__(self):
+		return 'Mine at {0} producing {1}'.format(self.position,
+			self.product_type)
+		
 	def produce(self):
 		'''
 		Method for handling producing during one time unit.
@@ -113,7 +118,7 @@ class Factory(Organization):
 		# storage of required materials
 		self.storage = dict()
 		for item in self.product_type.requirements:
-			self.storage[item] = self.product_type.requirements[item]
+			self.storage[item] = 0
 		
 		# list of factories supplying the materials
 		self.suppliers = dict()
@@ -130,15 +135,13 @@ class Factory(Organization):
 		return None
 	
 	def __repr__(self):
-		return '<Factory, ID={0}, position={1}, capacity={2}, product={3}>'.format(
-			hex(id(self)), self.position, self.capacity, self.product_type.name)
+		return '<Factory {0} at {1}, cap. {2} product {3}>'.format(
+			hex(id(self))[-5:], self.position, self.capacity,
+			self.product_type.name)
 	
 	def __str__(self):
-		return 'Factory at {0} producing {1}.\n'.format(
-			self.position, self.product_type.name)\
-			+ 'Storage state:\n{0}\n'.format('\n'.join(['-- {0}: {1} units'.format(
-					key.name, self.storage[key]) for key in self.storage]))\
-					+ 'Output queue length: {0}'.format(len(self.output))
+		return 'Factory at {0} producing {1}'.format(self.position,
+			self.product_type)
 	
 	def update_suppliers(self, world):
 		'''
@@ -147,7 +150,8 @@ class Factory(Organization):
 		'''
 		for m in self.storage:
 			self.suppliers[m] = world.product_origin[m]
-			self.suppliers[m].customers[self] = self.storage[m]
+			self.suppliers[m].customers[self] =\
+				self.product_type.requirements[m]
 		return None
 	
 	def material_sufficient(self):
@@ -259,6 +263,14 @@ class CustomerPoint(Organization):
 		# supply input queue
 		self.input = deque()
 		return None
+	
+	def __repr__(self):
+		return '<CustomerPoint {0} at {1}, cap. {2}, accepting {3}>'.format(
+			hex(id(self))[-5:], self.position, self.capacity, self.product_type)
+	
+	def __str__(self):
+		return 'CustomerPoint at {0} accepting {1}'.format(self.position,
+			self.product_type)
 	
 	def update_suppliers(self, world):
 		'''

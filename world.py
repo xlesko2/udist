@@ -45,6 +45,15 @@ class World(object):
 				self.objects[i].update_suppliers(self)
 		return None
 	
+	
+	def __repr__(self):
+		return '<World {0}, size {1}, objects {2}>'.format(hex(id(self))[-5:],
+			self.size, [str(i) for i in self.objects.values()])
+	def __str__(self):
+		return 'World object\nSize: {0}x{1} tiles\nObjects:{2}'.format(
+			self.size.x, self.size.y, '\n' + '\n'.join(['{0} at {1}'.format(
+			str(v),str(k)) for k,v in self.objects.items()]))
+	
 	def single_round(self):
 		for obj in self.objects:
 			self.objects[obj].single_round()
@@ -61,17 +70,6 @@ class World(object):
 		for i in map_matrix:
 			print(i)
 		return None
-	
-	def __repr__(self):
-		return '<World, ID={0}, size={1}, objects=[{2}]>'.format(
-			hex(id(self)), self.size, ', '.join(['{0} at {1}'.format(
-				'{0} (ID {1})'.format(self.objects[key].__class__.name,
-					hex(id(self.objects[key]))), key) for key in self.objects]))
-	
-	def __str__(self):
-		return 'World object\nSize: {0}x{1} tiles\nObjects:{2}'.format(
-			self.size.x, self.size.y, '\n' + '\n'.join(['{0} at {1}'.format(
-			str(v),str(k)) for k,v in self.objects.items()]))
 
 textile = ProductType('Textile', {}, 0.97)
 ziemiaciek = ProductType('Ziemiaciek', {textile: 2}, 1.04)
