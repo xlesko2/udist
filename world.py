@@ -1,6 +1,6 @@
 from vector2d import Vector2D
 from product import ProductType
-from organization import Organization, Mine, Factory
+from organization import Organization, Mine, Factory, CustomerPoint
 
 class World(object):
 	'''
@@ -40,7 +40,8 @@ class World(object):
 				self.product_origin[obj.product_type] = obj
 			
 		for i in self.objects:
-			if isinstance(self.objects[i], Factory):
+			if isinstance(self.objects[i], Factory) or\
+				isinstance(self.objects[i], CustomerPoint):
 				self.objects[i].update_suppliers(self)
 		return None
 	
@@ -55,6 +56,8 @@ class World(object):
 				map_matrix[obj.x][obj.y] = 'M'
 			elif isinstance(self.objects[obj], Factory):
 				map_matrix[obj.x][obj.y] = 'F'
+			elif isinstance(self.objects[obj], CustomerPoint):
+				map_matrix[obj.x][obj.y] = 'C'
 		for i in map_matrix:
 			print(i)
 		return None
@@ -76,4 +79,5 @@ pluszowy_mort = ProductType('Pluszowy Mort', {textile: 2, ziemiaciek: 1}, 1.24)
 m_tex = Mine(textile, 1000, Vector2D(5,5))
 f_ziem = Factory(ziemiaciek, 400, Vector2D(7,12))
 f_mort = Factory(pluszowy_mort, 1500, Vector2D(15,7))
-w = World((20,20), [m_tex, f_ziem, f_mort])
+c_mort = CustomerPoint(pluszowy_mort, 500, Vector2D(4,18))
+w = World((20,20), [m_tex, f_ziem, f_mort, c_mort])

@@ -227,4 +227,70 @@ class Factory(Organization):
 
 
 class CustomerPoint(Organization):
-	pass
+	'''
+	Class representing a consumer point (e.g., a market) as an organization
+	that only accepts products without producing anything.
+	The storage keeps track of input goods so far (for statistical purposes).
+	'''
+	name = 'Customer Point'
+	def __init__(self, product_type, capacity, position):
+		'''
+		Params:
+			-- product_type - produced ProductType ref
+			-- capacity - int, production per time unit
+			-- position - 2D Vector that positions factory in game world
+		'''
+		Organization.__init__(self, position)
+		
+		assert isinstance(product_type, ProductType),\
+			'product_type not a ProductType'
+		self.product_type = product_type
+		
+		assert isinstance(capacity, int), 'capacity not an int.'
+		self.capacity = capacity
+		
+		# storage of accepted materials
+		self.storage = dict()
+		self.storage[product_type] = 0
+		
+		# list of factories supplying the materials
+		self.suppliers = dict()
+		
+		# supply input queue
+		self.input = deque()
+		return None
+	
+	def update_suppliers(self, world):
+		'''
+		Method for updating the refs to factories supplying required materials.
+		Param world -- ref to world object
+		'''
+		self.suppliers[self.product_type] = \
+			world.product_origin[self.product_type]
+		self.suppliers[self.product_type].customers[self] = self.capacity
+		return None
+	
+	def accept_supplies(self):
+		'''
+		Method for accepting the supplies, i.e. moving them from the first
+		place in input queue into the storage.
+		'''
+		if len(self.input) == 0: # no supplies available
+			 return None
+		incoming_load = self.input.popleft()
+		for package in incoming_load:
+			while len(package) > 0:
+				item = package.unpack()
+				assert item.product_type in self.storage,\
+					'Factory with requirements {0}'.format(list(
+						self.storage.keys())) + ' accepted spam: {1}.'.\
+							format(self, item)
+				self.storage[item.product_type] += 1
+		return None
+	
+	def single_round(self):
+		'''
+		Method for handling actions taking place in a single time unit.
+		'''
+		self.accept_supplies()
+		return None
