@@ -2,6 +2,7 @@ from organization import Mine, Factory, CustomerPoint
 from product import ProductType
 from vector2d import Vector2D
 from world import World
+from matplotlib import pyplot
 
 textile = ProductType('Textile', {}, 0.97)
 ziemiaciek = ProductType('Ziemiaciek', {textile: 2}, 1.04)
@@ -41,5 +42,10 @@ class Simulation(object):
 				else:
 					self.plot_data[obj].append(obj.production)
 		return None
+
+	def create_plot(self):
+		for obj in self.plot_data:
+			pyplot.plot([i+1 for i in range(self.age)], self.plot_data[obj])
+		pyplot.show()
 
 sim = Simulation(w)
