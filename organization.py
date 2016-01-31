@@ -41,7 +41,8 @@ class Mine(Organization):
 		
 		# output queue
 		self.output = deque()
-		
+
+		self.production = 0	# stat value; total number of produced items	
 		return None
 	
 	def __repr__(self):
@@ -59,6 +60,7 @@ class Mine(Organization):
 		'''
 		for p in range(self.capacity):
 			self.output.append(Product(self.product_type))
+			self.production += 1
 		return None
 	
 	def send(self, package, customer):
@@ -132,6 +134,7 @@ class Factory(Organization):
 		# output queue
 		self.output = deque()
 		
+		self.production = 0 # stat value; total number of produced items
 		return None
 	
 	def __repr__(self):
@@ -194,6 +197,7 @@ class Factory(Organization):
 			self.storage[item] -= amount * self.product_type.requirements[item]
 		for p in range(amount):
 			self.output.append(Product(self.product_type))
+			self.production += 1
 		return None
 	
 	def send(self, package, customer):
