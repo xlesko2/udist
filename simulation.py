@@ -45,9 +45,11 @@ class Simulation(object):
 		self.age = 0 # simulation age (in time units)
 		return None
 	
-	def simulate(self, rounds):
+	def simulate(self, rounds, capacity_variation):
+		assert capacity_variation >= 0 and capacity_variation <= 1,\
+			'capacity_variation out of range <0,1>.'
 		for i in range(rounds):
-			w.single_round()
+			w.single_round(capacity_variation)
 			self.age += 1
 			for obj in self.plot_data:
 				if isinstance(obj, CustomerPoint):

@@ -16,7 +16,7 @@ class Organization(object):
 		return None
 
 	def single_round(self):
-		pass
+		raise Exception('Why did I get called? (Organization.single_round)')
 	
 
 class Mine(Organization):
@@ -90,9 +90,12 @@ class Mine(Organization):
 			self.send(package, cust)
 		return None
 	
-	def single_round(self):
+	def single_round(self, temp_capacity):
+		tmp = self.capacity
+		self.capacity = temp_capacity
 		self.produce()
 		self.export()
+		self.capacity = tmp
 		return None
 
 
@@ -227,13 +230,16 @@ class Factory(Organization):
 			self.send(package, cust)
 		return None
 	
-	def single_round(self):
+	def single_round(self, temp_capacity):
 		'''
 		Method for handling actions taking place in a single time unit.
 		'''
+		tmp = self.capacity
+		self.capacity = temp_capacity
 		self.accept_supplies()
 		self.produce()
 		self.export()
+		self.capacity = tmp
 		return None
 
 
@@ -307,9 +313,12 @@ class CustomerPoint(Organization):
 				self.storage[item.product_type] += 1
 		return None
 	
-	def single_round(self):
+	def single_round(self, temp_capacity):
 		'''
 		Method for handling actions taking place in a single time unit.
 		'''
+		tmp = self.capacity
+		self.capacity = temp_capacity
 		self.accept_supplies()
+		self.capacity = tmp
 		return None

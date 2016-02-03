@@ -1,6 +1,7 @@
 from vector2d import Vector2D
 from product import ProductType
 from organization import Organization, Mine, Factory, CustomerPoint
+import random
 
 class World(object):
 	'''
@@ -56,9 +57,13 @@ class World(object):
 			self.size.x, self.size.y, '\n' + '\n'.join(['{0} at {1}'.format(
 			str(v),str(k)) for k,v in self.objects.items()]))
 	
-	def single_round(self):
-		for obj in self.objects:
-			self.objects[obj].single_round()
+	def single_round(self, capacity_variation):
+		for obj in self.objects.values():
+			if capacity_variation != 0:
+				temp_capacity = int(obj.capacity + random.choice([-1,1]) *\
+					random.random() * (obj.capacity * capacity_variation))
+			obj.single_round(temp_capacity)
+		return None
 	
 	def construct_map(self):
 		map_matrix = [[' ' for j in range(self.size.y)] for i in range(self.size.x)]
