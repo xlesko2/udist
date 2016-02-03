@@ -44,8 +44,13 @@ class Simulation(object):
 		return None
 
 	def create_plot(self):
+		legends = list()
 		for obj in self.plot_data:
 			pyplot.plot([i+1 for i in range(self.age)], self.plot_data[obj])
+			legends.append('{0} {1}'.format(obj.name, hex(id(obj))[-5:]))
+		pyplot.legend(legends)
+		pyplot.title('World {0} (sim age: {1} rounds) performance stats'.format(
+			hex(id(self.world))[-5:], self.age))
 		pyplot.show()
 
 sim = Simulation(w)
