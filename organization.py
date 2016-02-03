@@ -23,6 +23,8 @@ class Mine(Organization):
 	Class representing an organization that exclusively produces materials,
 	without requiring any supplies on input.
 	'''
+	name = 'Mine'
+	
 	def __init__(self, product_type, capacity, position):
 		'''
 		Params: same as Factory (see below).
