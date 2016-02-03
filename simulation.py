@@ -45,7 +45,8 @@ class Simulation(object):
 
 	def create_plot(self):
 		legends = list()
-		for obj in self.plot_data:
+		for obj in sorted(self.plot_data,\
+			key = lambda i: super(type(i), i).inher_order.index(i.name)):
 			pyplot.plot([i+1 for i in range(self.age)], self.plot_data[obj])
 			legends.append('{0} {1} ({2})'.format(
 				obj.name, hex(id(obj))[-5:], obj.product_type.name))
