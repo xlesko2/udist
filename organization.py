@@ -8,6 +8,7 @@ class Organization(object):
 	Virtual class, inherited only by Factory so far.
 	'''
 	name = 'Organization'
+	inher_order = ['Mine', 'Factory', 'Customer Point']
 	
 	def __init__(self, position):
 		assert isinstance(position, Vector2D), 'position not a Vector2D.'
